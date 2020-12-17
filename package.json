@@ -1,0 +1,42 @@
+{
+  "name": "ems-mean",
+  "version": "0.0.1",
+  "description": "Employee Management System ",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js --exec babel-node --config nodemon.json",
+    "prebuild": "rm -rf build && mkdir build",
+    "build": "babel src -d build -s --source-maps --copy-files",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prakashslm/ems-mean.git"
+  },
+  "keywords": [
+    "MEAN"
+  ],
+  "author": "Prakash",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prakashslm/ems-mean/issues"
+  },
+  "homepage": "https://github.com/prakashslm/ems-mean#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.8"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "nodemon": "^2.0.6"
+  },
+  "engines": {
+    "node": "^8 || ^10"
+  }
+}
