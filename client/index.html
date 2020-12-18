@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+
+<head>
+  <base href="/">
+  <meta content="UTF-8" />
+  <title>live data example</title>
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body ng-controller="MainCtrl">
+  <ul>
+    <li><a href="#/">Start</a></li>
+    <li><a href="#/home">Home (embedded and external images)</a></li>
+    <li><a href="#/about">About</a></li>
+    <li><a href="#/haml">HAML (test HAML templates)</a></li>
+  </ul>
+
+  <ng-view></ng-view>
+
+  <ul>
+    <li ng-repeat="item in arr">{{item}}</li>
+  </ul>
+  http://datatables.extrared.net/Sample/
+</body>
+
+</html>

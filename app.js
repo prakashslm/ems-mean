@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 import express from 'express';
 import { connect, connection } from 'mongoose';
 import { json, urlencoded } from 'body-parser';
@@ -30,8 +31,8 @@ connect(connectionstring, connectOptions).then(
   }
 );
 
-app.use(json());
-app.use(urlencoded({ extended: false }));
+app.use(json({ limit: '100mb' }));
+app.use(urlencoded({ extended: true }));
 app.use(cor());
 
 app.use((req, res, next) => {
@@ -42,15 +43,18 @@ app.use((req, res, next) => {
 
 app.use('/api', EmpController);
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
   return res.json({
     message: 'Welcome'
   });
 });
-
-app.get('*', (req, res) => {
-  return res.sendFile(__dirname + '/public/views/index.html');
+app.get('/', function (req, res) {
+  return res.sendFile(path.join('public', 'index.html'));
 });
+// app.get('*', (req, res) => {
+//   return res.sendFile(__dirname + '/public/index.html');
+// });
 
 const emoji = ['💩', '👯‍', '😸', '🏄', '🚀', '🔥', '🎉', '😄', '🦁', '📋', '✅', '🌴'];
 
