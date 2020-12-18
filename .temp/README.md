@@ -1,12 +1,12 @@
 # ems-mean
 Employee Management nodejs mongoose/expressjs/angularjs/nodejs
 
-set path=%path%;C:\mongodb\bin
+npm install --save dotenv express cors body-parser mongoose
+npm install --save-dev nodemon babel-cli babel-preset-env babel-preset-stage-3
 
-mongo bookapi-test
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+npm install --save @babel/polyfill
 
-
-https://app.pluralsight.com/library/courses/node-js-express-rest-web-services-update/table-of-contents
 http://howtonode.org/express-mongodb
 
 ## Create New Employee
@@ -56,10 +56,3 @@ http://howtonode.org/express-mongodb
 - Response
 
 ```json
-
-
-nodemonConfig
-
-    "events": {
-      "start": "cls||clear"
-    }

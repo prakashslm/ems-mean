@@ -5,31 +5,36 @@ import express from 'express';
 import { connect, connection } from 'mongoose';
 import { json, urlencoded } from 'body-parser';
 import cor from 'cors';
-require('dotenv').config();
 
-import { config } from './api/config';
-import { EmpController } from './api/routes/employee';
-
+const port = process.env.PORT || 3000;
 const app = express();
-const connectionstring = process.env.DATABASE_URL || config.db;
 
-const connectOptions = {
+const config = {
+  autoIndex: false,
   useNewUrlParser: true,
+
   useUnifiedTopology: true,
-  // autoReconnect: true,
-  // readPreference: 'primaryPreferred',
-  // useFindAndModify: false,
+  useCreateIndex: true,
+  useFindAndModify: false,
 };
 
-connect(connectionstring, connectOptions).then(
-  (d) => {
-    console.log(`Connected to Database v${d.version}`);
-  },
-  (error) => {
-    console.log('Error connectiong to the database' + error);
-    process.exit(1);
-  }
-);
+console.log('-----------', process.env.ENV);
+let connectionString = 'mongodb://localhost:27017/bookapi-test';
+
+if (process.env.ENV === 'PROD') {
+  console.log('This is a REAL PROD');
+  connectionString = 'mongodb://localhost:27017/bookapi-prod';
+}
+
+connect(connectionString, config).then((d) => {
+  console.log(`Connected to Database v${d.version}`);
+}, (error) => {
+  console.log('Error connectiong to the database' + error);
+  process.exit(1);
+});
+
+const Book = require('./models/book-model');
+const bookRouter = require('./routes/book-router')(Book);
 
 app.use(json({ limit: '100mb' }));
 app.use(urlencoded({ extended: true }));
@@ -41,33 +46,55 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api', EmpController);
+app.use('/api', bookRouter);
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => {
-  return res.json({
-    message: 'Welcome'
-  });
-});
-app.get('/', function (req, res) {
-  return res.sendFile(path.join('public', 'index.html'));
-});
-// app.get('*', (req, res) => {
-//   return res.sendFile(__dirname + '/public/index.html');
-// });
+app.use('/js', express.static(__dirname + '/public/js'));
+app.use('/img', express.static(__dirname + '/public/img'));
+app.use('/css', express.static(__dirname + '/public/css'));
 
-const emoji = ['💩', '👯‍', '😸', '🏄', '🚀', '🔥', '🎉', '😄', '🦁', '📋', '✅', '🌴'];
-
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log('✅ Server listening on port 4000.');
+app.all('/*', (req, res, next) => {
+  res.sendFile('index.html', { root: __dirname + '/public' });
 });
 
-const cleanup = () => {
-  connection.close(() => {
-    console.log('💩 Mongoose disconnected on app termination');
+// app.use('/', express.static(path.join(__dirname, 'public')));
+// app.get('/', (req, res) => res.send('Welcome to my Nodemon API !'));
+// app.get('/', (req, res) => res.json({ ping: true }));
+
+app.server = app.listen(port, () => {
+  console.log(`✅ Server listening on port: ${port}`);
+});
+
+if (process.env.ENV !== 'TEST') {
+  process.on('SIGTERM', shutDown);
+  process.on('SIGINT', shutDown);
+}
+
+function shutDown(signal) {
+  console.log(signal);
+  app.server.close(() => {
+    console.log('Express server disconnected on app termination');
+    connection.close();
+    console.log('Mongoose disconnected on app termination');
     process.exit(0);
   });
+}
+process.on('exit', function () {
+  console.log('About to exit, waiting for remaining connections to complete');
+});
+
+let reporter = function (type, ...rest) {
+  // remote reporter logic goes here
+  console.error(type, rest);
 };
-process.on('SIGINT', cleanup);
-process.on('SIGTERM', cleanup);
+
+process.on('uncaughtException', (err) => {
+  reporter('uncaughtException', (new Date).toUTCString(), err.message, err.stack);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  reporter('unhandledRejection', (new Date).toUTCString(), reason.message || reason);
+  process.exit(1);
+});
+
+module.exports = app;

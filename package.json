@@ -3,16 +3,13 @@
   "version": "0.0.1",
   "description": "Employee Management System ",
   "type": "module",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "webpack": "node_modules/.bin/webpack",
-    "start": "nodemon app.js --exec babel-node --config ./nodemon.json",
+    "start": "nodemon app.js --exec babel-node",
     "prebuild": "rm -rf public && mkdir public",
-    "build": "webpack --config ./webpack.config.js",
-    "build1": "babel src -d public -s --source-maps --copy-files",
-    "dev": "node_modules/.bin/webpack-dev-server --devtool eval --progress --colors --hot --content-base public",
-    "lint": "eslint --config ./.eslintrc ./client/scripts --silent",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack -v -c ./webpack.config.js",
+    "lint": "eslint --no-ignore -f checkstyle .",
+    "test": "mocha tests/**/*Tests.js"
   },
   "repository": {
     "type": "git",
@@ -28,39 +25,37 @@
   },
   "homepage": "https://github.com/prakashslm/ems-mean#readme",
   "dependencies": {
-    "angular": "^1.4.8",
-    "angular-resource": "^1.4.8",
-    "angular-route": "^1.4.8",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "debug": "^4.3.1",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "glob": "^7.1.6",
-    "lodash": "^3.3.1",
-    "mongoose": "^5.11.8"
+    "mongoose": "^5.9.25"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^5.3.2",
     "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "copy-webpack-plugin": "^4.0.1",
-    "css-loader": "^0.15.6",
-    "eslint": "^1.0.0",
-    "eslint-loader": "^0.14.2",
-    "extract-text-webpack-plugin": "^0.8.2",
-    "file-loader": "^0.8.4",
-    "html-webpack-plugin": "^1.6.0",
-    "json-loader": "^0.5.4",
-    "nodemon": "^2.0.6",
-    "sass-loader": "^1.0.3",
-    "style-loader": "^0.12.3",
-    "url-loader": "^0.5.6",
-    "webpack": "^1.10.5",
-    "webpack-dev-server": "^1.10.1"
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "mocha": "^8.1.1",
+    "nodemon": "^2.0.4",
+    "should": "^13.2.3",
+    "sinon": "^9.0.3",
+    "supertest": "^4.0.2"
   },
   "engines": {
     "node": "^8 || ^10"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": 2500,
+    "env": {
+      "NODE_ENV": "development",
+      "ENV": "TEST",
+      "PORT": 4000
+    }
   }
 }
