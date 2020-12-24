@@ -5,11 +5,16 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js --exec babel-node",
+    "preserve": "cp ./.env.prod .env",
+    "serve": "nodemon -r app.mjs --exec babel-node",
+    "prestart": "cp ./.env.dev .env",
+    "start": "nodemon -r app.mjs --exec babel-node",
     "prebuild": "rm -rf public && mkdir public",
+    "build1": "rimraf dist/ && babel ./client --out-dir ./dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "build": "webpack -v -c ./webpack.config.js",
     "lint": "eslint --no-ignore -f checkstyle .",
-    "test": "mocha tests/**/*Tests.js"
+    "lint1": "eslint ./app --ext .js",
+    "test": "mocha --timeout 200 tests/**/*Tests.js"
   },
   "repository": {
     "type": "git",
@@ -27,13 +32,18 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "lodash": "^4.17.20",
     "mongoose": "^5.9.25"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^5.3.2",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
@@ -53,9 +63,7 @@
     ],
     "delay": 2500,
     "env": {
-      "NODE_ENV": "development",
-      "ENV": "TEST",
-      "PORT": 4000
+      "NODE_ENV": "dev"
     }
   }
 }

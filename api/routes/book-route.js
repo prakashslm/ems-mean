@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-const express = require('express');
-const bookController = require('../controllers/book-controller');
+import { Router } from 'express';
+import { bookController } from '../controllers/book-controller';
 
-function routes(Book) {
-  const bookRouter = express.Router();
+export function routes(Book) {
+  const bookRouter = Router();
   const controller = bookController(Book);
 
   bookRouter.route('/books')
@@ -73,5 +73,3 @@ function routes(Book) {
 
   return bookRouter;
 }
-
-module.exports = routes;

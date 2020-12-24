@@ -9,7 +9,7 @@ const employee = new Schema({
         index: {
             unique: true,
             dropDups: true
-        }
+        },
     },
     salary: Number,
     dob: String,
@@ -17,7 +17,7 @@ const employee = new Schema({
         type: String,
         lowercase: true,
         trim: true,
-        default: 'on'
+        default: 'on',
     },
     created_on: { type: Date, default: Date.now },
     updated_on: { type: Date, default: Date.now },

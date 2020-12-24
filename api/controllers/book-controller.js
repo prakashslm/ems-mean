@@ -1,4 +1,5 @@
-function booksController(Book) {
+export function booksController(Book) {
+  console.log('------------------------', Book);
   function post(req, res) {
     const book = new Book(req.body);
 
@@ -37,5 +38,3 @@ function booksController(Book) {
 
   return { post, get };
 }
-
-module.exports = booksController;

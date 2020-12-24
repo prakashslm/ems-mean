@@ -1,14 +1,6 @@
 # ems-mean
 Employee Management nodejs mongoose/expressjs/angularjs/nodejs
 
-set path=%path%;C:\mongodb\bin
-
-mongo bookapi-test
-
-
-https://app.pluralsight.com/library/courses/node-js-express-rest-web-services-update/table-of-contents
-http://howtonode.org/express-mongodb
-
 ## Create New Employee
 > This create new employee and save to the database
 
@@ -58,8 +50,32 @@ http://howtonode.org/express-mongodb
 ```json
 
 
+
+
+
+
+-P, --save-prod
+-D, --save-dev
+-O, --save-optional
+--no-save
+-E, --save-exact
+-B, --save-bundle
+
+set path=%path%;C:\mongodb\bin
+
+mongo bookapi-test
+
+
 nodemonConfig
 
     "events": {
       "start": "cls||clear"
     }
+
+
+    "serve": "node --inspect --experimental-modules app.mjs",
+    "start1": "nodemon app.js --exec \"babel-node src --presets @babel/preset-env\"",
+
+https://app.pluralsight.com/library/courses/node-js-express-rest-web-services-update/table-of-contents
+http://howtonode.org/express-mongodb
+https://github.com/electron/electron-api-demos

@@ -4,10 +4,18 @@ const path = require('path');
 import express from 'express';
 import { connect, connection } from 'mongoose';
 import { json, urlencoded } from 'body-parser';
-import cor from 'cors';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+// const dotenv = require('dotenv').config({ path: `.env.${(process.env.NODE_ENV || 'PROD').toLowerCase()}` });
 
 const port = process.env.PORT || 3000;
 const app = express();
+
+import { Book } from './api/models/book-model';
+import { routes } from './api/routes/book-route';
+
+const bookRouter = routes(Book);
 
 const config = {
   autoIndex: false,
@@ -18,10 +26,10 @@ const config = {
   useFindAndModify: false,
 };
 
-console.log('-----------', process.env.ENV);
+console.log('-----------', process.env.NODE_ENV);
 let connectionString = 'mongodb://localhost:27017/bookapi-test';
 
-if (process.env.ENV === 'PROD') {
+if (process.env.NODE_ENV === 'PROD') {
   console.log('This is a REAL PROD');
   connectionString = 'mongodb://localhost:27017/bookapi-prod';
 }
@@ -33,12 +41,9 @@ connect(connectionString, config).then((d) => {
   process.exit(1);
 });
 
-const Book = require('./models/book-model');
-const bookRouter = require('./routes/book-router')(Book);
-
 app.use(json({ limit: '100mb' }));
 app.use(urlencoded({ extended: true }));
-app.use(cor());
+app.use(cors());
 
 app.use((req, res, next) => {
   res.setHeader('x-powered-by', 'EMS'); // app.disable('x-powered-by');
@@ -60,8 +65,10 @@ app.all('/*', (req, res, next) => {
 // app.get('/', (req, res) => res.send('Welcome to my Nodemon API !'));
 // app.get('/', (req, res) => res.json({ ping: true }));
 
+const emoji = ['💩', '👯‍', '😸', '🏄', '🚀', '🔥', '🎉', '😄', '🦁', '📋', '✅', '🌴', '🤷‍♂️', `🏃‍♀️`, '🔖'];
+
 app.server = app.listen(port, () => {
-  console.log(`✅ Server listening on port: ${port}`);
+  console.log(`✅ 🏃‍♀️ Server listening on port: ${port}`);
 });
 
 if (process.env.ENV !== 'TEST') {
