@@ -1,12 +1,11 @@
 import { Schema, model } from 'mongoose';
 
-const bookModel = new Schema(
-  {
-    title: { type: String },
-    author: { type: String },
-    genre: { type: String },
-    read: { type: Boolean, default: false },
-  }, {
+const bookModel = new Schema({
+  title: { type: String },
+  author: { type: String },
+  genre: { type: String },
+  read: { type: Boolean, default: false },
+}, {
   // timestamps: true,
   // toJSON: {
   //   transform: (doc, ret, options) => {
@@ -19,4 +18,4 @@ const bookModel = new Schema(
 });
 
 // exports = module.exports = model('Book', bookModel);
-export const Book = model('Book', bookModel);
+exports = module.exports = model('Book', bookModel);

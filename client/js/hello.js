@@ -1,5 +1,6 @@
-angular.module('hello', ['ngRoute']).config(function ($routeProvider, $httpProvider) {
+/* eslint-disable */
 
+angular.module('hello', ['ngRoute']).config(($routeProvider, $httpProvider) => {
   $routeProvider.when('/', {
     templateUrl: 'home.html',
     controller: 'home',
@@ -7,40 +8,36 @@ angular.module('hello', ['ngRoute']).config(function ($routeProvider, $httpProvi
   }).otherwise('/');
 
   $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-  $httpProvider.defaults.headers.common['Accept'] = 'application/json';
+  $httpProvider.defaults.headers.common.Accept = 'application/json';
 
-}).controller('navigation',
+}).controller('navigation', ($rootScope, $http, $location, $route) => {
+  const self = this;
 
-  function ($rootScope, $http, $location, $route) {
+  self.tab = (route) => {
+    return $route.current && route === $route.current.controller;
+  };
 
-    var self = this;
-
-    self.tab = function (route) {
-      return $route.current && route === $route.current.controller;
-    };
-
-    $http.get('user').then(function (response) {
-      if (response.data.name) {
-        $rootScope.authenticated = true;
-      } else {
-        $rootScope.authenticated = false;
-      }
-    }, function () {
+  $http.get('user').then((response) => {
+    if (response.data.name) {
+      $rootScope.authenticated = true;
+    } else {
       $rootScope.authenticated = false;
-    });
-
-    self.credentials = {};
-
-    self.logout = function () {
-      $http.post('logout', {}).finally(function () {
-        $rootScope.authenticated = false;
-        $location.path("/");
-      });
     }
-
-  }).controller('home', function ($http) {
-    var self = this;
-    $http.get('idpapi/v1').then(function (response) {
-      self.greeting = response.data;
-    })
+  }, () => {
+    $rootScope.authenticated = false;
   });
+
+  self.credentials = {};
+
+  self.logout = () => {
+    $http.post('logout', {}).finally(() => {
+      $rootScope.authenticated = false;
+      $location.path("/");
+    });
+  };
+}).controller('home', ($http) => {
+  const self = this;
+  $http.get('idpapi/v1').then((response) => {
+    self.greeting = response.data;
+  });
+});

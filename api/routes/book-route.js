@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { Router } from 'express';
-import { bookController } from '../controllers/book-controller';
+import bookController from '../controllers/book-controller';
 
 export function routes(Book) {
   const bookRouter = Router();
@@ -30,7 +30,7 @@ export function routes(Book) {
       const returnBook = res.book || {};  // res.book.toJSON();
       const genre = encodeURIComponent(returnBook.genre);
       returnBook.links = {};
-      returnBook.links.filterByThisGenre = `http://${req.headers.host}/api/books/?genre=${genre}}`
+      returnBook.links.filterByThisGenre = `http://${req.headers.host}/api/books/?genre=${genre}}`;
       return res.json(returnBook);
     })
     .put((req, res) => {
@@ -45,7 +45,8 @@ export function routes(Book) {
         }
         return res.json(book);
       });
-    }).patch((req, res) => {
+    })
+    .patch((req, res) => {
       const { book } = req;
 
       // eslint-disable-next-line no-underscore-dangle
@@ -62,7 +63,8 @@ export function routes(Book) {
         }
         return res.json(book);
       });
-    }).delete((req, res) => {
+    })
+    .delete((req, res) => {
       req.book.remove((err) => {
         if (err) {
           return res.send(err);

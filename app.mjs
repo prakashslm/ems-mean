@@ -1,11 +1,12 @@
 'use strict';
 
-const path = require('path');
+import path from 'path';
 import express from 'express';
 import { connect, connection } from 'mongoose';
 import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
 dotenv.config();
 // const dotenv = require('dotenv').config({ path: `.env.${(process.env.NODE_ENV || 'PROD').toLowerCase()}` });
 
@@ -26,7 +27,7 @@ const config = {
   useFindAndModify: false,
 };
 
-console.log('-----------', process.env.NODE_ENV);
+console.log('-----------', process.env.NODE_ENV, port);
 let connectionString = 'mongodb://localhost:27017/bookapi-test';
 
 if (process.env.NODE_ENV === 'PROD') {
@@ -65,16 +66,11 @@ app.all('/*', (req, res, next) => {
 // app.get('/', (req, res) => res.send('Welcome to my Nodemon API !'));
 // app.get('/', (req, res) => res.json({ ping: true }));
 
-const emoji = ['💩', '👯‍', '😸', '🏄', '🚀', '🔥', '🎉', '😄', '🦁', '📋', '✅', '🌴', '🤷‍♂️', `🏃‍♀️`, '🔖'];
+const emoji = ['💩', '👯‍', '😸', '🏄', '🚀', '🔥', '🎉', '😄', '🦁', '📋', '✅', '🌴', '🤷‍♂️', `🏃‍♀️`, '🔖', `👋`, `☕️`, `✨`];
 
 app.server = app.listen(port, () => {
   console.log(`✅ 🏃‍♀️ Server listening on port: ${port}`);
 });
-
-if (process.env.ENV !== 'TEST') {
-  process.on('SIGTERM', shutDown);
-  process.on('SIGINT', shutDown);
-}
 
 function shutDown(signal) {
   console.log(signal);
@@ -85,11 +81,14 @@ function shutDown(signal) {
     process.exit(0);
   });
 }
-process.on('exit', function () {
+
+process.on('SIGTERM', shutDown);
+process.on('SIGINT', shutDown);
+process.on('exit', () => {
   console.log('About to exit, waiting for remaining connections to complete');
 });
 
-let reporter = function (type, ...rest) {
+let reporter = (type, ...rest) => {
   // remote reporter logic goes here
   console.error(type, rest);
 };
@@ -104,4 +103,4 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-module.exports = app;
+exports = module.exports = app;

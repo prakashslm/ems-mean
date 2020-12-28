@@ -1,16 +1,19 @@
-exports = module.exports = function errorHandler() {
-  return function errorHandler(err, req, res, next) {
+import * as path from 'path';
+import fs from 'fs';
+
+function errorHandler() {
+  return (err, req, res, next) => {
     if (err.status) res.statusCode = err.status;
     if (res.statusCode < 400) res.statusCode = 500;
-    if ('test' != env) console.error(err.stack);
-    var accept = req.headers.accept || '';
-    // html
+    if ('test' !== process.env.NODE_ENV) console.error(err.stack);
+    const accept = req.headers.accept || '';
+
     if (~accept.indexOf('html')) {
-      fs.readFile(__dirname + '/../public/style.css', 'utf8', function (e, style) {
-        fs.readFile(__dirname + '/../public/error.html', 'utf8', function (e, html) {
-          var stack = (err.stack || '')
+      fs.readFile(path.join(__dirname, '/../public/style.css'), 'utf8', (e1, style) => {
+        fs.readFile(path.join(__dirname, '/../public/error.html'), 'utf8', (e2, html) => {
+          const stack = (err.stack || '')
             .split('\n').slice(1)
-            .map(function (v) { return '' + v + ''; }).join('');
+            .map((v) => { return '' + v + ''; }).join('');
           html = html
             .replace('{style}', style)
             .replace('{stack}', stack)
@@ -23,15 +26,18 @@ exports = module.exports = function errorHandler() {
       });
       // json
     } else if (~accept.indexOf('json')) {
-      var error = { message: err.message, stack: err.stack };
-      for (var prop in err) error[prop] = err[prop];
-      var json = JSON.stringify({ error: error });
+      const error = { message: err.message, stack: err.stack };
+      for (let prop in err) error[prop] = err[prop];
+      const json = JSON.stringify({ error: error });
       res.setHeader('Content-Type', 'application/json');
       res.end(json);
       // plain text
     } else {
       res.setHeader('Content-Type', 'text/plain');
       res.end(err.stack);
+      next();
     }
   };
 };
+
+exports = module.exports = errorHandler;

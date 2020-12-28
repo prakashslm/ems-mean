@@ -3,7 +3,8 @@
     "browser": true,
     "es2020": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "es6": true
   },
   "extends": [
     "airbnb-base"
@@ -16,6 +17,7 @@
     "no-console": 0,
     "no-debugger": "off",
     "newline-after-const": "off",
-    "comma-dangle": 0
+    "comma-dangle": 0,
+    "linebreak-style": 0
   }
 }

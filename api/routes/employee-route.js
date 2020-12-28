@@ -1,19 +1,17 @@
 import { Router } from 'express';
 
-const route = Router();
-
 import { Employee } from '../schemas/employee';
 
-route.route('/employee').get(async (req, res) => {
-  return res.send(await Employee.find());
-});
+const route = Router();
 
-route.route('/employee/:id').get(async (req, res) => {
-  return res.send(await Employee.findById({ _id: req.params.id }));
-});
+route.route('/employee').get(async (req, res) => res.send(await Employee.find()));
+
+route.route('/employee/:id').get(async (req, res) => res.send(await Employee.findById({ _id: req.params.id })));
 
 route.route('/employee').post(async (req, res) => {
-  const { firstname, lastname, email, salary, dob } = req.body;
+  const {
+    firstname, lastname, email, salary, dob
+  } = req.body;
   const newEmployee = new Employee({
     firstname: firstname,
     lastname: lastname,
@@ -34,7 +32,7 @@ route.route('/employee').post(async (req, res) => {
 });
 
 route.route('/login').post(async (req, res) => {
-  let userEmail = req.body.email
+  let userEmail = req.body.email;
   userEmail = await Employee.findOne({ email: userEmail });
 
   if (!userEmail) {
@@ -47,7 +45,9 @@ route.route('/login').post(async (req, res) => {
 });
 
 route.route('/employee/:id').put(async (req, res) => {
-  const { id, firstname, lastname, email, salary, dob } = req.body;
+  const {
+    id, firstname, lastname, email, salary, dob
+  } = req.body;
   console.log(req.body, id, req.params.id);
 
   const updateResult = await Employee.updateOne(
@@ -76,4 +76,4 @@ route.route('/employee/:id').delete((req, res) => {
   return res.send({ message: 'Employee info deleted Successfully' });
 });
 
-export const EmpController = route;
+exports = module.exports = route;

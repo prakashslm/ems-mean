@@ -1,0 +1,29 @@
+{
+  "package": "./package.json",
+  "color": true,
+  "recursive": true,
+  "exit": true,
+  "require": [
+    "@babel/register",
+    "./tests/setup.js"
+  ],
+  "timeout": 1000,
+  "reporter": "spec",
+  "spec": [
+    "test",
+    "spec"
+  ],
+  "watch-files": [
+    "./tests/*.test.js",
+    "./tests/*.spec.js",
+    "./tests/**/*Tests.js"
+  ],
+  "watch-ignore": [
+    "./node_modules",
+    "./.temp"
+  ],
+  "excludes": [
+    "./.temp/*",
+    "./.nyc_output/*"
+  ]
+}

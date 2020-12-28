@@ -1,18 +1,8 @@
-export function booksController(Book) {
-  console.log('------------------------', Book);
-  function post(req, res) {
-    const book = new Book(req.body);
-
-    if (!req.body.title) {
-      res.status(400);
-      return res.send('Title is required');
-    }
-    book.save();
-    res.status(201);
-    return res.json(book);
+export default function booksController(Book) {
+  function Controller() {
   }
 
-  function get(req, res) {
+  Controller.prototype.get = (req, res) => {
     const query = {};
 
     if (req.query.genre) {
@@ -34,7 +24,19 @@ export function booksController(Book) {
       console.log(returnBooks);
       return res.json(returnBooks);
     });
-  }
+  };
 
-  return { post, get };
+  Controller.prototype.post = (req, res) => {
+    const book = new Book(req.body);
+
+    if (!req.body.title) {
+      res.status(400);
+      return res.send('Title is required');
+    }
+    book.save();
+    res.status(201);
+    return res.json(book);
+  };
+
+  return new Controller();
 }

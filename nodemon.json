@@ -1,0 +1,18 @@
+{
+  "verbose": true,
+  "restartable": "rs",
+  "ignore": [
+    "node_modules/**/node_modules",
+    "*.test.js",
+    "*Tests.js",
+    "fixtures/*",
+    "*.md"
+  ],
+  "delay": 2500,
+  "env": {
+    "NODE_ENV": "dev"
+  },
+  "events": {
+    "restart": "osascript -e 'display notification \"app restarted\" with title \"nodemon\"'"
+  }
+}

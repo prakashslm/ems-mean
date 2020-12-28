@@ -1,8 +1,5 @@
-'use strict';
+import { Db, BSONPure, Server } from 'mongoose';
 
-import { Db } from 'mongodb';
-import { Server } from 'mongodb';
-const mongo = require('mongodb');
 const dbPort = 27017;
 const dbHost = 'localhost';
 const dbName = 'employee';
@@ -18,29 +15,30 @@ DataBase.GetDB = () => {
     DataBase.InitDB();
   }
   return DataBase.db;
-}
+};
 
-DataBase.InitDB = function () {
-  DataBase.db = new Db(dbName, new Server(dbHost, dbPort, {}, {}), { safe: false, auto_reconnect: true });
+DataBase.InitDB = () => {
+  DataBase.db = new Db(dbName, new Server(dbHost, dbPort, {}, {}), {
+    safe: false, auto_reconnect: true
+  });
 
-  DataBase.db.open(function (e, d) {
+  DataBase.db.open((e, d) => {
     if (e) {
       console.log(e);
     } else {
       console.log('connected to database :: ' + dbName);
     }
   });
-}
+};
 
-DataBase.Disconnect = function () {
+DataBase.Disconnect = () => {
   if (DataBase.db) {
     DataBase.db.close();
   }
-}
+};
 
-DataBase.BsonIdFromString = function (id) {
-  var BSON = mongo.BSONPure;
-  return new BSON.ObjectID(id);
-}
+DataBase.BsonIdFromString = (id) => {
+  return new BSONPure.ObjectID(id);
+};
 
 exports = module.exports = DataBase;

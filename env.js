@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+
 const env = process.env.NODE_ENV;
 // const path = require('path');
 console.log(`Testing for: ${env} ${__dirname}`);
@@ -8,12 +10,12 @@ try {
       Error('Environment undefined, if local in terminal: export NODE_ENV=development');
       break;
     case 'development':
-      require('dotenv').config({
+      dotenv.config({
         path: './dev.env'
       });
       break;
     case 'production':
-      require('dotenv').config({
+      dotenv.config({
         path: './prod.env'
       });
       break;
@@ -23,7 +25,6 @@ try {
 } catch (err) {
   Error('Error trying to run file');
 }
-
 
 /*
 const env = process.env.NODE_ENV || "development"
@@ -43,7 +44,6 @@ const configs = {
         port: 3000,
         dbUser: 'root',
         dbPassword: 'root',
-
     },
     smoke: {
         port: 3000,

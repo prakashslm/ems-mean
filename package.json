@@ -5,16 +5,22 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "preserve": "cp ./.env.prod .env",
+    "mocha": "node_modules/.bin/mocha",
+    "clean": "rm -rf node_modules/ package-lock.json .nyc_output/ dist/",
+    "postclean": "npm cache clean -fd",
+    "preserve": "cp .env.prod .env",
     "serve": "nodemon -r app.mjs --exec babel-node",
-    "prestart": "cp ./.env.dev .env",
+    "prestart": "cp .env.dev .env",
     "start": "nodemon -r app.mjs --exec babel-node",
-    "prebuild": "rm -rf public && mkdir public",
+    "prebuild": "rm -rf public1 && mkdir public1",
     "build1": "rimraf dist/ && babel ./client --out-dir ./dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "build": "webpack -v -c ./webpack.config.js",
-    "lint": "eslint --no-ignore -f checkstyle .",
-    "lint1": "eslint ./app --ext .js",
-    "test": "mocha --timeout 200 tests/**/*Tests.js"
+    "lint1": "eslint -f checkstyle .",
+    "lint": "eslint .",
+    "pretest": "cp ./.env.test .env",
+    "test": "mocha tests/**/*.spec.js",
+    "precover": "cp ./.env.test .env",
+    "cover": "nyc -a --reporter=text mocha tests"
   },
   "repository": {
     "type": "git",
@@ -44,26 +50,19 @@
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
+    "@babel/register": "^7.12.10",
+    "chai": "^4.2.0",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "mocha": "^8.1.1",
     "nodemon": "^2.0.4",
+    "nyc": "^15.1.0",
     "should": "^13.2.3",
     "sinon": "^9.0.3",
     "supertest": "^4.0.2"
   },
   "engines": {
     "node": "^8 || ^10"
-  },
-  "nodemonConfig": {
-    "restartable": "rs",
-    "ignore": [
-      "node_modules/**/node_modules"
-    ],
-    "delay": 2500,
-    "env": {
-      "NODE_ENV": "dev"
-    }
   }
 }

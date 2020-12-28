@@ -1,10 +1,11 @@
-const should = require('should');
-const sinon = require('sinon');
-const bookController = require('../api/controllers/book-controller');
+import { should } from 'should';
+import { spy } from 'sinon';
 
-describe('Book Controller Tests', () => {
-  describe('post', () => {
-    it('should not allow an empty title on post', () => {
+import bookController from '../api/controllers/book-controller';
+
+describe('BookController', () => {
+  describe('user calls post api', () => {
+    it('checks for title not to empty', () => {
       const Book = function (book) { this.save = () => { } }
 
       const req = {
@@ -14,9 +15,9 @@ describe('Book Controller Tests', () => {
       };
 
       const res = {
-        status: sinon.spy(),
-        send: sinon.spy(),
-        json: sinon.spy()
+        status: spy(),
+        send: spy(),
+        json: spy()
       };
 
       const controller = bookController(Book);
